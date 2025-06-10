@@ -43,7 +43,7 @@ Kraken API key (set in .env)
 Installation
 
 Clone the Repository
-git clone https://github.com/Garvaneja/QuantumTrader.git
+git clone https://github.com/Garvaneja/QuantumHybridBot.git
 cd QuantumTrader
 
 
@@ -92,6 +92,6 @@ We welcome contributions! Please read CONTRIBUTING.md for guidelines on how to c
 License
 This project is licensed under the MIT License - see LICENSE for details.
 Contact
-For investment inquiries or technical questions, reach out to Garvaneja or email [your_email@example.com].
+For investment inquiries or technical questions, reach out to Garvaneja or email [garvit.aifund@gmail.com].
 
 QuantumTrader: Pioneering the future of algorithmic trading with quantum-inspired precision. Invest in the next generation of trading technology today!
