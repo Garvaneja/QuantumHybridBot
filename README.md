@@ -32,7 +32,7 @@ Core Components: QuantumHybrid, MetaLSTM, MarketMicrostructure, NashExecutor, Ri
 Execution Layer: AdaptiveRouter and StealthRouter for optimized trade routing.
 Data Flow: Real-time market data → Feature extraction → Signal generation → Risk validation → Execution.
 
-For detailed architecture, see docs/architecture.md.
+For a detailed architecture overview, see [docs/architecture.md](docs/architecture.md).
 Getting Started
 Prerequisites
 
@@ -56,7 +56,8 @@ Install Dependencies
 pip install -r requirements.txt
 
 
-Configure EnvironmentCopy .env.example to .env and add your Kraken API keys:
+Configure Environment
+Copy `.env.example` to `.env` and add your Kraken API keys:
 cp .env.example .env
 
 Edit .env:
@@ -83,14 +84,15 @@ asyncio.run(run_trader())
 The bot connects to Kraken, trains on historical data, and executes trades based on generated signals.
 Documentation
 
-Architecture Overview
-API Reference
-Setup Guide
+See the [Architecture](docs/architecture.md), [API Reference](docs/api.md), and [Setup Guide](docs/setup.md) for more details.
 
 Contributing
 We welcome contributions! Please read CONTRIBUTING.md for guidelines on how to contribute, including coding standards and pull request processes.
 License
 This project is licensed under the MIT License - see LICENSE for details.
+
+Disclaimer
+This project is experimental research software and does not constitute financial advice or a promise of profitability. Use it at your own risk.
 Contact
 For investment inquiries or technical questions, reach out to Garvaneja or email [garvit.aifund@gmail.com].
 

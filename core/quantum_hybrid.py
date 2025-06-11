@@ -253,6 +253,6 @@ class QuantumHybridQiskit(nn.Module):
             raise RuntimeError("Model not trained. Call train() first.")
         with torch.no_grad():
             q_sig = self.quantum_forward(price_data).squeeze()
-            gate = torch.sigmoid(self.sentiment)
-
-
+            gate = torch.sigmoid(self.sentiment_weight * sentiment_score * 2)
+            hybrid = q_sig * (1 + gate) / 2
+            return float(torch.clamp(hybrid, 0, 1).item())
