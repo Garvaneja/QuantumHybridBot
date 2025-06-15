@@ -23,12 +23,15 @@ class QuantumHybrid(nn.Module):
         self.scaler = RobustScaler()
 
         # "Quantum" simulator (classical NN)
+        # Tuned architecture with additional capacity
         self.quantum_simulator = nn.Sequential(
-            nn.Linear(self._input_dim, 16),
+            nn.Linear(self._input_dim, 32),
             nn.Tanh(),
-            nn.Linear(16, 8),
+            nn.Linear(32, 16),
             nn.ReLU(),
-            nn.Linear(8, 2),
+            nn.Linear(16, 4),
+            nn.ReLU(),
+            nn.Linear(4, 2),
             nn.Softmax(dim=-1)
         )
 
@@ -77,7 +80,7 @@ class QuantumHybrid(nn.Module):
             logger.error(f"Quantum forward error: {e}")
             return torch.tensor([0.5], dtype=torch.float32)
 
-    async def train(self, X_train, y_train, epochs: int = 50, lr: float = 0.01, verbose: bool = False):
+    async def train(self, X_train, y_train, epochs: int = 100, lr: float = 0.005, verbose: bool = False):
         optimizer = optim.Adam(self.parameters(), lr=lr)
         criterion = nn.BCELoss()
 
@@ -131,9 +134,13 @@ class QuantumHybridQiskit(nn.Module):
             logger.warning(f"Qiskit init failed: {e}. Using classical fallback.")
             self.use_qnn = False
             self.quantum_simulator = nn.Sequential(
-                nn.Linear(self._input_dim, 8),
+                nn.Linear(self._input_dim, 16),
                 nn.Tanh(),
-                nn.Linear(8, 2),
+                nn.Linear(16, 8),
+                nn.ReLU(),
+                nn.Linear(8, 4),
+                nn.ReLU(),
+                nn.Linear(4, 2),
                 nn.Softmax(dim=-1)
             )
 
@@ -226,7 +233,7 @@ class QuantumHybridQiskit(nn.Module):
             logger.error(f"Forward error: {e}")
             return torch.tensor([0.5], dtype=torch.float32)
 
-    async def train(self, X_train, y_train, epochs: int = 50, lr: float = 0.01, verbose: bool = False):
+    async def train(self, X_train, y_train, epochs: int = 100, lr: float = 0.005, verbose: bool = False):
         optimizer = optim.Adam(self.parameters(), lr=lr)
         criterion = nn.BCELoss()
         X = list(X_train) if not isinstance(X_train, np.ndarray) else [X_train[i] for i in range(len(X_train))]
