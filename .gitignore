@@ -51,4 +51,5 @@ models/
 
 alerts/
 
-quantum-trader-lite/
+ta-lib/
+ta-lib-*.tar.gz

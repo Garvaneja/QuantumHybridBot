@@ -81,6 +81,9 @@ async def run_trader():
 import asyncio
 asyncio.run(run_trader())
 
+### Backtesting
+Run `python scripts/backtest.py --symbol ETH/USD` to evaluate the strategy on historical data.
+
 The bot connects to Kraken, trains on historical data, and executes trades based on generated signals.
 Documentation
 
