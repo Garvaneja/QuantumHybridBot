@@ -51,8 +51,13 @@ models/
 
 alerts/
 
+
 # Local TA-Lib build artifacts
 ta-lib/
 ta-lib-*.tar.gz
 
 quantum-trader-lite/
+
+ta-lib/
+ta-lib-*.tar.gz
+
