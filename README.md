@@ -81,6 +81,10 @@ async def run_trader():
 import asyncio
 asyncio.run(run_trader())
 
+### Dashboard UI
+Run `python -m ui.dashboard` to launch a simple curses-based interface showing
+the bot's latest price, signal, and error count. Press `q` to exit the UI.
+
 ### Backtesting
 Run `python scripts/backtest.py --symbol ETH/USD` to evaluate the strategy on historical data.
 
