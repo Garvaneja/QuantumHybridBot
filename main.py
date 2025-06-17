@@ -27,8 +27,10 @@ from core.market_connector import QuantumFeed
 load_dotenv()
 
 class QuantumTrader:
-    def __init__(self, symbol: str = 'ETH/USD'):
+    def __init__(self, symbol: str = 'ETH/USD', initial_balance: float = 1000.0):
+        """Initialize trader with chosen symbol and starting balance."""
         self.symbol = symbol
+        self.initial_balance = float(initial_balance)
         self._init_failed = False
         self._consecutive_errors = 0
         self.max_errors = 5
@@ -41,7 +43,7 @@ class QuantumTrader:
             self.brain = QuantumHybrid()
             self.hft_detector = EnhancedMetaLSTM()
             self.router = StealthRouter()
-            self.risk = QuantumRiskManager()
+            self.risk = QuantumRiskManager(base_equity=self.initial_balance)
             self.microstructure = MicrostructureAnalyzer()
             self.market = QuantumFeed(exchange='kraken', symbol=self.symbol)
             
@@ -330,7 +332,14 @@ class QuantumTrader:
         print("✅ Shutdown complete")
 
 async def main():
-    trader = QuantumTrader(symbol='ETH/CAD')
+    import argparse
+    parser = argparse.ArgumentParser(description="Run QuantumTrader")
+    parser.add_argument('--symbol', default='ETH/CAD')
+    parser.add_argument('--balance', type=float, default=1000.0,
+                        help='Starting account balance for risk manager')
+    args = parser.parse_args()
+
+    trader = QuantumTrader(symbol=args.symbol, initial_balance=args.balance)
     try:
         await trader.start()
     except KeyboardInterrupt:

@@ -5,13 +5,14 @@ class RiskException(Exception):
     pass
 
 class QuantumRiskManager:
-    def __init__(self):
-        self.base_equity = 1000  # Starting capital
-        self.current_balance = 1000
+    def __init__(self, base_equity: float = 1000.0):
+        """Initialize risk manager with starting capital."""
+        self.base_equity = float(base_equity)
+        self.current_balance = float(base_equity)
         self.position_limits = {'ETH': 0.2, 'BTC': 0.1}  # Base allocation %
         self.trade_log = []
         self.pnl_history = []
-        self.equity_curve = [1000]
+        self.equity_curve = [float(base_equity)]
         self.current_volatility = 0.0
         self.max_drawdown_limit = -0.05  # -5%
         self.var_confidence = 0.95  # 95% VaR
