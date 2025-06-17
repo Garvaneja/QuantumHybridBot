@@ -66,7 +66,14 @@ KRAKEN_API_SECRET=your_api_secret
 
 
 Run the Bot
-python main.py
+```
+python main.py --symbol ETH/USD --balance 300
+```
+Step-by-step:
+1. Install dependencies with `pip install -r requirements.txt`.
+2. Copy `.env.example` to `.env` and add your Kraken API keys.
+3. Deposit at least $300 in your Kraken account.
+4. Launch the bot using the command above.
 
 
 
@@ -86,7 +93,7 @@ Run `python -m ui.dashboard` to launch a simple curses-based interface showing
 the bot's latest price, signal, and error count. Press `q` to exit the UI.
 
 ### Backtesting
-Run `python scripts/backtest.py --symbol ETH/USD` to evaluate the strategy on historical data.
+Run `python scripts/backtest_plot.py --symbol ETH/USDT` to evaluate the strategy on high quality Binance data and view a return plot.
 
 The bot connects to Kraken, trains on historical data, and executes trades based on generated signals.
 Documentation

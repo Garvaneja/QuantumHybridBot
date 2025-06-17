@@ -28,15 +28,15 @@ class TemporalBlock(nn.Module):
         return self.dropout(out) + residual  # Residual connection
 
 class EnhancedMetaLSTM(nn.Module):
-    def __init__(self, input_size=10, hidden_size=128, num_layers=4):
+    def __init__(self, input_size=10, hidden_size=128, num_layers=4, dropout=0.2):
         super().__init__()
         
         # Enhanced TCN with hierarchical dilations
         self.tcn = nn.Sequential(
-            TemporalBlock(input_size, hidden_size, kernel_size=5, stride=1, dilation=1),
-            TemporalBlock(hidden_size, hidden_size, kernel_size=5, stride=1, dilation=2),
-            TemporalBlock(hidden_size, hidden_size, kernel_size=3, stride=1, dilation=4),
-            nn.Dropout(0.2)
+            TemporalBlock(input_size, hidden_size, kernel_size=5, stride=1, dilation=1, dropout=dropout),
+            TemporalBlock(hidden_size, hidden_size, kernel_size=5, stride=1, dilation=2, dropout=dropout),
+            TemporalBlock(hidden_size, hidden_size, kernel_size=3, stride=1, dilation=4, dropout=dropout),
+            nn.Dropout(dropout)
         )
 
         # Bidirectional LSTM with skip connections
@@ -46,7 +46,7 @@ class EnhancedMetaLSTM(nn.Module):
             num_layers=num_layers,
             batch_first=True,
             bidirectional=True,
-            dropout=0.2
+            dropout=dropout
         )
         self.lstm_skip = nn.Linear(hidden_size*2, hidden_size)  # Skip connection for bidir outputs
         
@@ -54,7 +54,7 @@ class EnhancedMetaLSTM(nn.Module):
         self.attention = nn.MultiheadAttention(
             embed_dim=hidden_size,
             num_heads=8,
-            dropout=0.2,
+            dropout=dropout,
             batch_first=True
         )
         self.layer_norm = nn.LayerNorm(hidden_size)
