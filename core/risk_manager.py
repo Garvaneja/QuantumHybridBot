@@ -41,9 +41,11 @@ class QuantumRiskManager:
             raise RiskException(f"🛑 Drawdown limit breached: {current_dd:.2%}")
 
         # 3. Dynamic position sizing
-        limit = self._get_dynamic_limit(asset)
+        price = order.get('price', 0) or 1.0
+        limit = self._get_dynamic_limit(asset, price)
         if amount > limit:
-            raise RiskException(f"⚠️ {asset} position exceeds {limit:.1%} limit")
+            frac_limit = limit * price / self.current_balance
+            raise RiskException(f"⚠️ {asset} position exceeds {frac_limit:.1%} limit")
 
         # 4. Liquidity check (if order book provided)
         if order_book and not self._check_liquidity(order['symbol'], amount, order_book):
@@ -51,13 +53,14 @@ class QuantumRiskManager:
 
         return True
 
-    def _get_dynamic_limit(self, asset: str) -> float:
-        """Volatility-adjusted position limit"""
+    def _get_dynamic_limit(self, asset: str, price: float) -> float:
+        """Volatility-adjusted position limit in asset units"""
         base_limit = self.position_limits.get(asset, 0.1)
-        if self.current_volatility == 0:
-            return base_limit
-        vol_adjustment = min(2.0, 0.5 / self.current_volatility)
-        return base_limit * vol_adjustment
+        limit_frac = base_limit
+        if self.current_volatility != 0:
+            limit_frac *= min(2.0, 0.5 / self.current_volatility)
+        price = price or 1.0
+        return limit_frac * self.current_balance / price
 
     def _check_liquidity(self, symbol: str, amount: float, order_book: dict) -> bool:
         """Validates order size against market depth"""
