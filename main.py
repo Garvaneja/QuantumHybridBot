@@ -252,12 +252,18 @@ class QuantumTrader:
     async def _calculate_position_size(self) -> float:
         try:
             balance = await self.exchange.fetch_balance()
-            usd_balance = float(balance['free']['USD'])
+            quote = self.symbol.split('/')[-1]
+            available = None
+            for code, amt in balance.get('free', {}).items():
+                if code.upper().endswith(quote.upper()):
+                    available = float(amt)
+                    break
+            quote_balance = available if available is not None else 0.0
             price = self.market.get_optimal_price()
             if price <= 0:
                 return 0.0
             risk_per_trade = 0.02
-            size = usd_balance * risk_per_trade / price
+            size = quote_balance * risk_per_trade / price
             return round(size, self.exchange.markets[self.symbol]['precision']['amount'])
         except Exception as e:
             print(f"💢 Position sizing failed: {e}")
